@@ -33,19 +33,25 @@ buttonEvent.addEventListener("click", function() {
 })
 
 onValue(shoppingListInDB, function(snapshot) {
-    let shoppingList = Object.entries(snapshot.val())
 
-    clearShoppingListEl()
-    
-    for (let i = 0; i < shoppingList.length; i++) {
-        let currentList = shoppingList[i]
+    if (snapshot.exists()) {
+        let shoppingList = Object.entries(snapshot.val())
 
-        // Challenge: Make two let variables:
-        //currentItemID anc currentItemValue and use currentItem to set both of them equal to the correct values.
+        clearShoppingListEl()
+        
+        for (let i = 0; i < shoppingList.length; i++) {
+            let currentList = shoppingList[i]
 
-        let currentItemID = currentList[0]
-        let currentItemValue = currentList[1]
-        appendItemToShoppingListEl(currentList)
+            // Challenge: Make two let variables:
+            //currentItemID anc currentItemValue and use currentItem to set both of them equal to the correct values.
+
+            let currentItemID = currentList[0]
+            let currentItemValue = currentList[1]
+            appendItemToShoppingListEl(currentList)
+        
+        }
+    } else {
+        list.innerHTML = "No items here... yet"
     }
 
 })
