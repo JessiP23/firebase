@@ -21,7 +21,17 @@ buttonEvent.addEventListener("click", function() {
     push(shoppingListInDB, inputValue);
 
     // Challenge: Clear the input field when button is pressed
-    inputForm.value = ''
+    // inputForm.value = ''
+    clearInputFieldEl()
 
-    list.innerHTML += `<li>${inputValue}</li>`
+    // list.innerHTML += `<li>${inputValue}</li>`
+    appendItemToShoppingListEl(inputValue)
 })
+
+function clearInputFieldEl() {
+    inputForm.value=''
+}
+
+function appendItemToShoppingListEl(itemValue) {
+    list.innerHTML += `<li>${itemValue}</li>`
+}
