@@ -1,5 +1,5 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js';
-import {getDatabase, ref, push, onValue} from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js';
+import {getDatabase, ref, push, onValue, remove} from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js';
 
 
 const appSettings = {
@@ -33,12 +33,18 @@ buttonEvent.addEventListener("click", function() {
 })
 
 onValue(shoppingListInDB, function(snapshot) {
-    let shoppingList = Object.values(snapshot.val())
+    let shoppingList = Object.entries(snapshot.val())
 
     clearShoppingListEl()
     
     for (let i = 0; i < shoppingList.length; i++) {
         let currentList = shoppingList[i]
+
+        // Challenge: Make two let variables:
+        //currentItemID anc currentItemValue and use currentItem to set both of them equal to the correct values.
+
+        let currentItemID = currentList[0]
+        let currentItemValue = currentList[1]
         appendItemToShoppingListEl(currentList)
     }
 
@@ -53,12 +59,23 @@ function clearInputFieldEl() {
     inputForm.value = ''
 }
 
-function appendItemToShoppingListEl(itemValue) {
-    list.innerHTML += `<li>${itemValue}</li>`
-}
+function appendItemToShoppingListEl(item) {
 
-function appendBooksToList(bookValue) {
-    booksInDB.innerHTML += `<li>${bookValue}</li>`
+    let itemID = item[0]
+    let itemValue = item[1]
+    // list.innerHTML += `<li>${itemValue}</li>`
+    let newEl = document.createElement("li")
+
+    newEl.textContent = itemValue
+
+    // removing an item when clicked
+    newEl.addEventListener("click", function() {
+        let exactLocationOfItemInDB = ref(database, `shoppingList/${itemID}`)
+
+        remove(exactLocationOfItemInDB)
+    })
+
+    list.append(newEl)
 }
 
 /*
