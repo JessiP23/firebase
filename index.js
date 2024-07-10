@@ -1,5 +1,5 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js';
-import {getDatabase, ref, push} from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js';
+import {getDatabase, ref, push, onValue} from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js';
 
 
 const appSettings = {
@@ -10,11 +10,28 @@ const app = initializeApp(appSettings);
 const database = getDatabase(app)
 const shoppingListInDB = ref(database, 'shoppingList')
 
+
+//Example
+const booksInDB = ref(database, 'books');
+
+
 // Console firebase, Realtime database, create database, select region, and copy the url into the databaseURL
 
 const inputForm = document.getElementById('input-field');
 const buttonEvent = document.getElementById("add-button");
 const list = document.getElementById("shopping-list");
+
+onValue(booksInDB, function(snapshot) {
+    let booksArray = Object.values(snapshot.val())
+
+    clearBooksListEl()
+    
+    for (let i = 0; i < booksArray.length; i++) {
+        let currentBook = booksArray[i]
+        appendItemToShoppingListEl(currentBook)
+    }
+
+})
 
 buttonEvent.addEventListener("click", function() {
     let inputValue = inputForm.value;
@@ -32,8 +49,16 @@ function clearInputFieldEl() {
     inputForm.value=''
 }
 
+function clearBooksListEl() {
+    booksInDB.innerHTML = ''
+}
+
 function appendItemToShoppingListEl(itemValue) {
     list.innerHTML += `<li>${itemValue}</li>`
+}
+
+function appendBooksToList(bookValue) {
+    booksInDB.innerHTML += `<li>${bookValue}</li>`
 }
 
 /*
