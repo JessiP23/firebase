@@ -21,18 +21,6 @@ const inputForm = document.getElementById('input-field');
 const buttonEvent = document.getElementById("add-button");
 const list = document.getElementById("shopping-list");
 
-onValue(booksInDB, function(snapshot) {
-    let booksArray = Object.values(snapshot.val())
-
-    clearBooksListEl()
-    
-    for (let i = 0; i < booksArray.length; i++) {
-        let currentBook = booksArray[i]
-        appendItemToShoppingListEl(currentBook)
-    }
-
-})
-
 buttonEvent.addEventListener("click", function() {
     let inputValue = inputForm.value;
     push(shoppingListInDB, inputValue);
@@ -45,12 +33,21 @@ buttonEvent.addEventListener("click", function() {
     appendItemToShoppingListEl(inputValue)
 })
 
-function clearInputFieldEl() {
-    inputForm.value=''
-}
+onValue(shoppingListInDB, function(snapshot) {
+    let shoppingList = Object.values(snapshot.val())
 
-function clearBooksListEl() {
-    booksInDB.innerHTML = ''
+    list.innerHTML = ''
+    
+    for (let i = 0; i < shoppingList.length; i++) {
+        let currentList = shoppingList[i]
+        appendItemToShoppingListEl(currentList)
+    }
+
+})
+
+
+function clearInputFieldEl() {
+    inputForm.value = ''
 }
 
 function appendItemToShoppingListEl(itemValue) {
